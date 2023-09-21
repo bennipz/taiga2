@@ -1,0 +1,73 @@
+// NAVBAR
+const menu = document.querySelector('#mobile-menu');
+const menuLinks = document.querySelector('.navbar__menu');
+
+// This code adds an event listener to the `menu` element, so that when it is clicked, the `is-active` class is toggled on both the `menu` and `menuLinks` elements.
+menu.addEventListener('click', function() {
+    menu.classList.toggle('is-active');
+    menuLinks.classList.toggle('active');
+});
+
+// LOADING SCREEN
+document.addEventListener("DOMContentLoaded", function() {
+    // This code gets the `loadingVideo` and `mainContent` elements from the DOM.
+    var loadingVideo = document.getElementById("loadingVideo");
+    var mainContent = document.getElementById("mainContent");
+
+    // This code plays the `loadingVideo` element.
+    loadingVideo.play();
+
+    // This code uses a `setTimeout()` function to wait for 1500 milliseconds (1.5 seconds) before hiding the `preloader` element and displaying the `mainContent` element.
+    setTimeout(function() {
+        document.getElementById("preloader").style.display = "none";
+        mainContent.style.display = "block";
+    }, 1500);
+});
+
+// This function reloads the page.
+function reloadPage() {
+    document.getElementById("preloader").style.display = "flex";
+    document.getElementById("mainContent").style.display = "none";
+    location.reload();
+}
+
+// CLOTHING IMAGE
+const clothingImage = document.getElementById('clothing-image');
+const scrollStartThreshold = 1000;
+const scrollEndThreshold = 4000;
+let offsetX = 0;
+let textOpacity = 0;
+
+// This function calculates the scroll percentage of the page, based on the current scroll position and the scroll start and end thresholds.
+function handleScroll() {
+    let scrollPercentage;
+
+    if (window.scrollY < scrollStartThreshold) {
+        scrollPercentage = 0;
+    } else if (window.scrollY > scrollEndThreshold) {
+        scrollPercentage = 1;
+    } else {
+        scrollPercentage = (window.scrollY - scrollStartThreshold) / (scrollEndThreshold - scrollStartThreshold);
+        scrollPercentage = Math.pow(scrollPercentage, 3);
+    }
+
+    return scrollPercentage;
+}
+
+// This function updates the offset of the clothing image, based on the scroll percentage.
+function updateScroll() {
+    const scrollPercentage = handleScroll();
+
+    // Adjust the speed by multiplying scrollPercentage with a factor (e.g., 0.5 for half speed).
+    const scrollSpeedFactor = 0.5;
+    
+    offsetX = -scrollPercentage * scrollSpeedFactor * (clothingImage.offsetWidth - window.innerWidth);
+
+    clothingImage.style.transform = `translateX(${offsetX}px)`;
+}
+
+// Initial setup
+handleScroll();
+
+// This code adds an event listener to the `window` object, so that the `handleScroll()` function is called whenever the window is scrolled.
+window.addEventListener('scroll', handleScroll);
